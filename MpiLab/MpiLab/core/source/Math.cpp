@@ -1,4 +1,4 @@
-#include "../headers/ThomasAlgorithm.h"
+#include "../headers/Math.h"
 
 
 void thomasAlgorithm(Vector& a, Vector& b, Vector& c, Vector& d, Vector& out) {
@@ -16,4 +16,16 @@ void thomasAlgorithm(Vector& a, Vector& b, Vector& c, Vector& d, Vector& out) {
 	// Backward sweep
 	for (int i = n - 2; i > -1; i--)
 		out[i] = (d[i] - c[i] * out[i + 1]) / b[i];
+}
+
+void transposeTiled(float* A, float* B, int N, int tile_size) {
+	for (int i = 0; i < N; i += tile_size) {
+		for (int j = 0; j < N; j += tile_size) {
+			for (int p = 0; p < tile_size; p++) {
+				for (int q = 0; q < tile_size; q++) {
+					B[IND(i + p, j + q, N)] = A[IND(j + q, i + p, N)];
+				}
+			}
+		}
+	}
 }

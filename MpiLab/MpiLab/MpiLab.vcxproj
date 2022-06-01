@@ -151,8 +151,9 @@
     <ClCompile Include="core\source\DifferenceScheme.cpp" />
     <ClCompile Include="core\source\Matrix.cpp" />
     <ClCompile Include="core\source\MpiSolver.cpp" />
+    <ClCompile Include="core\source\MpiSolverFast.cpp" />
     <ClCompile Include="core\source\Solver.cpp" />
-    <ClCompile Include="core\source\ThomasAlgorithm.cpp" />
+    <ClCompile Include="core\source\Math.cpp" />
     <ClCompile Include="core\source\Vector.cpp" />
     <ClCompile Include="MpiLab.cpp" />
   </ItemGroup>
@@ -160,8 +161,9 @@
     <ClInclude Include="core\headers\DifferenceScheme.h" />
     <ClInclude Include="core\headers\Matrix.h" />
     <ClInclude Include="core\headers\MpiSolver.h" />
+    <ClInclude Include="core\headers\MpiSolverFast.h" />
     <ClInclude Include="core\headers\Solver.h" />
-    <ClInclude Include="core\headers\ThomasAlgorithm.h" />
+    <ClInclude Include="core\headers\Math.h" />
     <ClInclude Include="core\headers\Vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

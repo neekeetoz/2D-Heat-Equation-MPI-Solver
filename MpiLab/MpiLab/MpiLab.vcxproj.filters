@@ -18,7 +18,7 @@
     <ClCompile Include="MpiLab.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="core\source\ThomasAlgorithm.cpp">
+    <ClCompile Include="core\source\Math.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="core\source\Vector.cpp">
@@ -36,12 +36,15 @@
     <ClCompile Include="core\source\MpiSolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="core\source\MpiSolverFast.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core\headers\DifferenceScheme.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="core\headers\ThomasAlgorithm.h">
+    <ClInclude Include="core\headers\Math.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="core\headers\Vector.h">
@@ -54,6 +57,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="core\headers\MpiSolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="core\headers\MpiSolverFast.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

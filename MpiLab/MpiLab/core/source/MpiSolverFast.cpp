@@ -1,21 +1,21 @@
-#include "../headers/MpiSolver.h"
+#include "../headers/MpiSolverFast.h"
 #include "../headers/Math.h"
 #include "mpi.h"
 
 
 
-MpiSolver::MpiSolver(DifferenceScheme scheme) : Solver(scheme) {
+MpiSolverFast::MpiSolverFast(DifferenceScheme scheme) : Solver(scheme) {
 	MPI_Comm_rank(MPI_COMM_WORLD, &m_ProcessId);
 	MPI_Comm_size(MPI_COMM_WORLD, &m_NProcesses);
 
 	m_DataExchangeBuff = new Matrix(scheme.getDim(), scheme.getDim());
 }
 
-MpiSolver::~MpiSolver() {
+MpiSolverFast::~MpiSolverFast() {
 	delete m_DataExchangeBuff;
 }
 
-const Matrix* MpiSolver::computePseudoLayer() {
+const Matrix* MpiSolverFast::computePseudoLayer() {
 	size_t pBlockSize = m_Scheme.getDim() / m_NProcesses;
 	size_t start = pBlockSize * m_ProcessId;
 	size_t end = pBlockSize * (m_ProcessId + 1);
@@ -38,11 +38,11 @@ const Matrix* MpiSolver::computePseudoLayer() {
 	return m_PseudoLayer;
 }
 
-const Matrix* MpiSolver::refinePseudoLayer() {
+const Matrix* MpiSolverFast::refinePseudoLayer() {
 	size_t pBlockSize = m_Scheme.getDim() / m_NProcesses;
 	size_t start = pBlockSize * m_ProcessId;
 	size_t end = pBlockSize * (m_ProcessId + 1);
-	// 
+
 	if (start == 0)
 		start++;
 
@@ -61,7 +61,7 @@ const Matrix* MpiSolver::refinePseudoLayer() {
 	return m_MainLayer;
 }
 
-const Matrix* MpiSolver::computeNextLayer() {
+const Matrix* MpiSolverFast::computeNextLayer() {
 	computePseudoLayer();
 	MPISynchronizePseudoLayer();
 	refinePseudoLayer();
@@ -69,7 +69,7 @@ const Matrix* MpiSolver::computeNextLayer() {
 	return m_MainLayer;
 }
 
-void MpiSolver::MPISynchronizePseudoLayer() {
+void MpiSolverFast::MPISynchronizePseudoLayer() {
 	size_t pBlockSize = m_Scheme.getDim() / m_NProcesses;
 	size_t nReceiveElements = pBlockSize * m_Scheme.getDim();
 	MPI_Allgather(
@@ -77,7 +77,7 @@ void MpiSolver::MPISynchronizePseudoLayer() {
 		m_PseudoLayer->getDataPtr(), nReceiveElements, MPI_FLOAT, MPI_COMM_WORLD);
 }
 
-void MpiSolver::MPISynchronizeMainLayer() {
+void MpiSolverFast::MPISynchronizeMainLayer() {
 	size_t pBlockSize = m_Scheme.getDim() / m_NProcesses;
 	size_t start = pBlockSize * m_ProcessId;
 	size_t end = pBlockSize * (m_ProcessId + 1);
@@ -93,10 +93,6 @@ void MpiSolver::MPISynchronizeMainLayer() {
 		m_DataExchangeBuff->getDataPtr() + nReceiveElements * m_ProcessId, nReceiveElements, MPI_FLOAT,
 		m_DataExchangeBuff->getDataPtr(), nReceiveElements, MPI_FLOAT, MPI_COMM_WORLD);
 
-
-	for (size_t i = 0; i < m_Scheme.getDim(); i++) {
-		for (size_t j = 0; j < m_Scheme.getDim(); j++)
-			m_MainLayer->set(j, i, m_DataExchangeBuff->get(i, j));
-	}
+	transposeTiled(m_DataExchangeBuff->getDataPtr(), m_MainLayer->getDataPtr(), m_MainLayer->getDim1(), 16);
 }
 

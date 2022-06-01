@@ -1,5 +1,5 @@
 #include "../headers/Solver.h"
-#include "../headers/ThomasAlgorithm.h"
+#include "../headers/Math.h"
 
 Solver::Solver(DifferenceScheme scheme) : m_Scheme(scheme) {
 	m_MainLayer = new Matrix(scheme.getDim(), scheme.getDim());

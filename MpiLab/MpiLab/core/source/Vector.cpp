@@ -21,7 +21,7 @@ Vector::~Vector() {
 void Vector::print() const {
 	printf("[ ");
 	for (size_t i = 0; i < m_Size; i++)
-		printf("%1.3f\t", operator[](i));
+		printf("%1.3f ", operator[](i));
 	printf(" ]");
 }
 
